@@ -1,0 +1,149 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/documentationjs/gulp-documentation#readme"
+
+    >gulp-documentation (v3.2.0)</a>
+</h1>
+<h4>documentation plugin for gulp</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.gulp-documentation">module gulp-documentation</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-documentation.gulp-documentation">
+            function <span class="apidocSignatureSpan"></span>gulp-documentation
+            <span class="apidocSignatureSpan">(format, options, formatterOptions)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.gulp-documentation" id="apidoc.module.gulp-documentation">module gulp-documentation</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-documentation.gulp-documentation" id="apidoc.element.gulp-documentation.gulp-documentation">
+        function <span class="apidocSignatureSpan"></span>gulp-documentation
+        <span class="apidocSignatureSpan">(format, options, formatterOptions)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">gulp-documentation = function (format, options, formatterOptions) {
+  options = options || {};
+  formatterOptions = formatterOptions || {};
+  var files = [];
+  format = format || &#x27;md&#x27;;
+  var formatter = documentation.formats[format];
+  if (!formatter) {
+    throw new Error(
+      &#x27;invalid format given: valid options are &#x27; +
+        Object.keys(documentation.formats).join(&#x27;, &#x27;)
+    );
+  }
+  return through2.obj(
+    function document(file, enc, cb) {
+      files.push(file);
+      cb();
+    },
+    function(cb) {
+      documentation.build(
+        files.map(function(file) {
+          return file.path;
+        }),
+        options,
+        function(err, comments) {
+          formatter(
+            comments,
+            formatterOptions,
+            function(err, output) {
+              if (format === &#x27;json&#x27; || format === &#x27;md&#x27;) {
+                this.push(
+                  new File({
+                    path: options.filename || &#x27;API.&#x27; + format,
+                    contents: new Buffer(output)
+                  })
+                );
+              } else if (format === &#x27;html&#x27;) {
+                output.forEach(
+                  function(file) {
+                    this.push(file);
+                  }.bind(this)
+                );
+              }
+              cb();
+            }.bind(this)
+          );
+        }.bind(this)
+      );
+    }
+  );
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
